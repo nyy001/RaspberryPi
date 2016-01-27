@@ -4,17 +4,22 @@
 Raspberry PI
 Check to see if there is a valid IP Address
 If Not, then down/up wlan0 and check again.
-Jose F. Reyes
-Jan 16, 2016 @23:32
+Jose Reyes
+Jan 18, 2016 @19:43
 '''
 import commands
 import datetime
 import time
+from pytz import timezone
 
 class network():
     def reset(self):
-        f = open('/home/pi/jose/RoboRaspi/network_check/ip_check.txt', 'a')
-        now = datetime.datetime.now()
+        f = open('/home/pi/network_check/network.log', 'a')
+        fmt = "%Y-%m-%d %H:%M:%S %Z%z"
+        now_utc = datetime.datetime.now(timezone('UTC'))
+        now_eastern = now_utc.astimezone(timezone('US/Eastern'))
+        now = now_eastern.strftime(fmt)
+
         f.write('\n')
         f.write(str(now))
         f.write('\n')
@@ -37,21 +42,25 @@ class network():
                 f.write('\n')
                 f.write(ip_address)
                 f.write('\n')
-                f.write("=======================")
+                f.write("-------------------------")
         except ValueError:
             pass
         f.close()
-now = datetime.datetime.now()
-f = open('/home/pi/jose/RoboRaspi/network_check/ip_check.txt', 'a')
+
+fmt = "%Y-%m-%d %H:%M:%S %Z%z"
+now_utc = datetime.datetime.now(timezone('UTC'))
+now_eastern = now_utc.astimezone(timezone('US/Eastern'))
+now = now_eastern.strftime(fmt)
+f = open('/home/pi/network_check/network.log', 'a')
 f.write('\n')
 f.write(str(now))
 f.write('\n')
-f.write("Checking if we have a valid IP Address")
+f.write("Checking for valid IP Address")
 f.write('\n')
 ip_address = commands.getoutput("hostname -I")
 try:
     if "192.168.1" not in ip_address:
-        f.write("IP Address Invalid... Attempting to reset() ")
+        f.write("IP Address Invalid; Calling reset() ")
         f.write('\n')
         f.close()
         A = network()
