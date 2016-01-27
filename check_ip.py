@@ -4,7 +4,7 @@
 Raspberry PI
 Check to see if there is a valid IP Address
 If Not, then down/up wlan0 and check again.
-Jose Reyes
+Jose Reyes | yanks81@gmail.com
 Jan 18, 2016 @19:43
 '''
 import commands
